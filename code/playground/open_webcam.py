@@ -2,6 +2,10 @@ import cv2
 from tkinter import *
 from PIL import Image, ImageTk
 
+width = 640
+height = 480
+
+
 # Function to display the webcam feed
 def update_frame():
     global cap, canvas, photo
@@ -22,10 +26,10 @@ cap = cv2.VideoCapture(0)
 # Create the main Tkinter window
 root = Tk()
 root.title("Webcam Viewer")
-root.geometry("640x480")
+root.geometry(f"{width}x{height}")
 
 # Create a canvas for displaying the webcam feed
-canvas = Canvas(root, width=640, height=480)
+canvas = Canvas(root, width=width, height=height)
 canvas.pack()
 
 # Start updating the frames
