@@ -1,6 +1,8 @@
 import cv2
 import serial
 import time
+import numpy as np
+import function_library as myfunc
 
 # Initialize serial communication
 arduino = serial.Serial('COM7', 9600)  # Replace 'COM3' with your Arduino's port
@@ -15,6 +17,7 @@ cap = cv2.VideoCapture(0)
 # Initial servo angles
 angle_pan, angle_tilt = 90, 90
 prev_angle_pan, prev_angle_tilt = angle_pan, angle_tilt
+error_pan, error_tilt = 0, 0
 
 try:
     while True:
@@ -45,13 +48,17 @@ try:
             frame_center_y = frame.shape[0] // 2
 
             delta_x = frame_center_x - face_center_x
-            angle_pan = int(90 + delta_x * 0.5)
+            if abs(delta_x) < 100:
+                target_angle_pan = prev_angle_pan
+            else:
+                target_angle_pan = 90 + delta_x
+            angle_pan, error_pan = myfunc.pid_controller(target_angle_pan, prev_angle_pan, error_pan)
 
-            delta_y = frame_center_y - face_center_y
-            angle_tilt = int(90 + delta_y * 0.4)
+            delta_y = face_center_y - frame_center_y
+            target_angle_tilt = 90 + delta_y
+            angle_tilt, error_tilt = myfunc.pid_controller(target_angle_tilt, prev_angle_tilt, error_tilt)
 
             adj_angle_pan = min(max(0, angle_pan), 180)
-            
             adj_angle_tilt = min(max(0, angle_tilt), 180)
 
             text_color = (0, 100, 130) #bgr
