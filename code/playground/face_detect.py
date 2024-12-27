@@ -1,8 +1,8 @@
 import cv2
 
 # Load pre-trained DNN model
-prototxt_path = "deploy.prototxt"  # Path to prototxt file
-model_path = "res10_300x300_ssd_iter_140000.caffemodel"  # Path to caffemodel file
+prototxt_path = "code/assets/deploy.prototxt"  # Path to prototxt file
+model_path = "code/assets/res10_300x300_ssd_iter_140000.caffemodel"  # Path to caffemodel file
 
 net = cv2.dnn.readNetFromCaffe(prototxt_path, model_path)
 
@@ -30,7 +30,7 @@ while True:
         confidence = detections[0, 0, i, 2]  # Confidence score
 
         # Filter out weak detections by confidence threshold
-        if confidence > 0.5:
+        if confidence > 0.7:
             # Extract bounding box coordinates
             box = detections[0, 0, i, 3:7] * [w, h, w, h]
             (x1, y1, x2, y2) = box.astype("int")

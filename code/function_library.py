@@ -8,17 +8,16 @@ def controller_angle(target_val, prev_val):
 
 
 def pid_controller(target_val, prev_val, prev_error):
-    kp = 0.05
-    ki = 0.1
-    kd = 0.1
+    kp = 0.01
+    ki = 0.01
+    kd = 0.01
 
     error_val = target_val - prev_val
     integral = prev_error + error_val
     derivative = error_val - prev_error
 
-
-
     movement = int(kp * error_val + ki * integral + kd * derivative)
-    movement = min(max(-2, movement), 2)
+    movement = min(max(-1, movement), 1)
     adj_target = prev_val + movement
     return adj_target, error_val
+

@@ -11,6 +11,7 @@ void setup() {
   servoY.write(90);  // Initial position
 }
 
+
 void loop() {
   if (Serial.available() > 0) {
     String data = Serial.readStringUntil('\n'); // Read data from Python
